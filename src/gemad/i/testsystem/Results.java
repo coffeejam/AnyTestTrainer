@@ -3,9 +3,7 @@ package gemad.i.testsystem;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 
-/**
- * Created by 4 on 21.04.2016.
- */
+
 public class Results extends JFrame{
     private JButton okButton;
     private JTextArea textArea2;
@@ -17,7 +15,7 @@ public class Results extends JFrame{
     public Results() {
         super("Results");
         this.setContentPane(rootPanel);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setBounds(500, 250, 750, 500);
         this.setVisible(true);
         this.getRootPane().setDefaultButton(okButton);
@@ -29,7 +27,7 @@ public class Results extends JFrame{
     }
 
     public void setStat(TestBuilder test) {
-        textArea2.setText(Result.returnStat(test.getWrongAnswers(), test.getCurrentQuestionNumber()));
+        textArea2.setText(Result.returnStat(test.getWrongAnswers(), test.getCurrentQuestionNumber() + 1));
     }
 
     public void setAnswers(TestBuilder test) {

@@ -2,9 +2,6 @@ package gemad.i.testsystem.Data;
 
 import java.util.ArrayList;
 
-/**
- * Created by 4 on 20.04.2016.
- */
 public class TestList {
     private ArrayList<Question> questions = new ArrayList<>();
     private String testName;
@@ -38,4 +35,7 @@ public class TestList {
         return questions.size();
     }
 
+    public String getName() {
+        return testName;
+    }
 }

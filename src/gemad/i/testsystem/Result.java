@@ -2,28 +2,27 @@ package gemad.i.testsystem;
 
 import gemad.i.testsystem.Data.Question;
 import gemad.i.testsystem.Data.TestList;
+import gemad.i.testsystem.Data.TextConsts;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Created by 4 on 01.05.2016.
- */
+
 public class Result {
 
     public static void printResult(ArrayList<Question> answers, TestList test) {
         final int testSize = test.size();
         Question q;
         if (answers.size() == testSize) {
-            System.out.println("Вау! Вы ответили на все вопросы неправильно, это что, специально?");
+            System.out.println(TextConsts.ALL_WRONG);
         } else {
             switch (answers.size()) {
                 case 0:
                     if (testSize == 10) {
-                        System.out.println("Господи, 10 из 10! И все верно!");
+                        System.out.println(TextConsts.TEN_OUT_OF_TEN_CORRECT);
                     } else {
-                        System.out.println("Поздравляю, вы ответили верно на все вопросы!");
+                        System.out.println(TextConsts.ALL_CORRECT);
                     }
                     return;
                 case 10:
@@ -97,7 +96,8 @@ public class Result {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < answers.size(); i++) {
             q = answers.get(i);
-            result.append(q.getTestName() + "." + (q.getQuestionNumber() + 1) + " " + q.returnQuestion(q, false, true) + "<br>");
+            /*q.getTestName() + "." + Change this back when several tests feature added*/
+            result.append(q.getQuestionNumber() + 1).append(" ").append(q.returnQuestion(q, false, true)).append("<br>");
         }
         return result.toString();
     }

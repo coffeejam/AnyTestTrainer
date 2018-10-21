@@ -4,9 +4,7 @@ import gemad.i.testsystem.Data.Question;
 
 import java.util.ArrayList;
 
-/**
- * Created by 4 on 20.04.2016.
- */
+
 public class Printer {
 
     public static void printQuestion(Question question, boolean shuffle) {

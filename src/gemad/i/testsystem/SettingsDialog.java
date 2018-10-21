@@ -1,30 +1,71 @@
 package gemad.i.testsystem;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileFilter;
+import java.awt.event.*;
 
-/**
- * Created by 4 on 21.04.2016.
- */
+
 public class SettingsDialog extends JFrame {
     private JCheckBox checkBoxShuffleQuest;
     private JCheckBox checkBoxShuffleAns;
-    private JRadioButton radioButtonTest1;
-    private JRadioButton radioButtonTest2;
-    private JRadioButton radioButtonTest3;
+
     private JButton buttonBegin;
-    private JRadioButton radioButtonAllTests;
     private JPanel rootPanel;
+    private JFileChooser openFile;
+    private JTextField directoryField;
+    private JButton openButton;
 
     public SettingsDialog() {
-        super("Тест");
+        super("Any Test Trainer");
         this.setContentPane(rootPanel);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.pack();
         this.setLocation(500, 250);
         this.setVisible(true);
         this.getRootPane().setDefaultButton(buttonBegin);
+        openFile = new JFileChooser();
+        if (directoryField.getText().isEmpty())
+            buttonBegin.setEnabled(false);
+
+        openFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        openFile.setFileFilter(new TextFilesFilter());
+        openButton.addActionListener(e -> {
+            openFile.setDialogTitle("Choose text file");
+            int res = openFile.showOpenDialog(SettingsDialog.this);
+            if (res == JFileChooser.APPROVE_OPTION){
+                directoryField.setText(openFile.getSelectedFile().getAbsolutePath());
+                buttonBegin.setEnabled(true);
+            }
+        });
+
+        directoryField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                    if ("".equals(directoryField.getText())) {
+                        buttonBegin.setEnabled(false);
+                    } else {
+                        buttonBegin.setEnabled(true);
+                    }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                    if ("".equals(directoryField.getText())) {
+                        buttonBegin.setEnabled(false);
+                    }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                    if ("".equals(directoryField.getText())) {
+                        buttonBegin.setEnabled(false);
+                    } else {
+                        buttonBegin.setEnabled(true);
+                    }
+            }
+        });
     }
 
     private void createUIComponents() {
@@ -39,22 +80,28 @@ public class SettingsDialog extends JFrame {
         return checkBoxShuffleAns.isSelected();
     }
 
-    public int getChosenTest() {
-        if (radioButtonTest1.isSelected()) {
-            return 1;
-        } else if (radioButtonTest2.isSelected()) {
-            return 2;
-        } else if (radioButtonTest3.isSelected()) {
-            return 3;
-        } else if (radioButtonAllTests.isSelected()) {
-            return 0;
-        } else {
-            return -1;
-        }
+    public String getChosenTest() {
+        return directoryField.getText();
     }
+
+
 
     public void setActionListener(ActionListener al) {
         buttonBegin.addActionListener(al);
+    }
+
+    class TextFilesFilter extends FileFilter {
+        // принимает файл или отказывает ему
+        public boolean accept(java.io.File file) {
+            // все каталоги принимаем
+            if ( file.isDirectory() ) return true;
+            // для файлов смотрим на расширение
+            return ( file.getName().endsWith(".txt") );
+        }
+        // возвращает описание фильтра
+        public String getDescription() {
+            return "Text files (*.txt)";
+        }
     }
 
 }

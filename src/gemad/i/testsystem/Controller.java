@@ -1,67 +1,56 @@
 package gemad.i.testsystem;
 
 import gemad.i.testsystem.Data.Question;
+import gemad.i.testsystem.Data.TestList;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-/**
- * Created by 4 on 30.05.2016.
- */
+
 public class Controller {
     TestBuilder test;
-    SettingsDialog settingsForm;
-    TestDialog testingForm;
-    Results resultsForm;
-    final TestBuilder[] tb = new TestBuilder[1];
-    final ActionListener answerQuestion = new ActionListener() {
+    private SettingsDialog settingsForm;
+    private QuestionForm testingForm;
+    private Results resultsForm;
+    private Warning warningDialog;
+    private final TestBuilder[] tb = new TestBuilder[1];
+    private final ActionListener answerQuestion = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
+            checkAnswer(tb[0], testingForm.getAnswer());
             if (tb[0].isLastQuestion()) {
                 endTesting(tb[0]);
             } else {
-                checkAnswer(tb[0], testingForm.getAnswer());
                 nextQuestion(tb[0]);
             }
         }
     };
-    final ActionListener startTest = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                startTest();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            nextQuestion(tb[0]);
+    private final ActionListener startTest = e -> {
+        try {
+            startTest();
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
     };
-    final ActionListener newTest = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            closeResults();
-            newTesting();
-        }
+    private final ActionListener newTest = e -> {
+        closeResults();
+        newTesting();
     };
-    ActionListener endTest = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            endTesting(tb[0]);
-        }
-    };
+    private ActionListener endTest = e -> endTesting(tb[0]);
 
     public Controller() {
         newTesting();
     }
 
 
-    public void newTesting() {
+    private void newTesting() {
         settingsForm = new SettingsDialog();
         settingsForm.setActionListener(startTest);
     }
 
-    public void endTesting(TestBuilder test) {
+    private void endTesting(TestBuilder test) {
         testingForm.dispose();
         resultsForm = new Results();
         resultsForm.setStat(test);
@@ -70,33 +59,41 @@ public class Controller {
         resultsForm.setActionListener(newTest);
     }
 
-    public void nextQuestion(TestBuilder test) {
+    private void nextQuestion(TestBuilder test) {
         Question q = test.getNextQuestion();
-        testingForm.setText(q.getName());
-        for (int i = 0; i < 4; i++) {
-            testingForm.setOptionText(i, q.getOption(i));
-        }
-        testingForm.setSelected(0);
-        testingForm.setTitle((test.getCurrentQuestionNumber() + 1) + " / " + test.size());
+        testingForm.editForm(q.getName(), "", q.getOptions());
+        setFormTitle(testingForm, test);
     }
 
-    public void startTest() throws IOException {
+    private void startTest() throws IOException {
         tb[0] = new TestBuilder(settingsForm.isQuestionShuffleChecked(), settingsForm.isOptionShuffleChecked(),
-                settingsForm.getChosenTest());
-        settingsForm.dispose();
-        testingForm = new TestDialog();
-        testingForm.setSubmitActionListener(answerQuestion);
-        testingForm.setEndActionListener(endTest);
+                settingsForm.getChosenTest().trim());
+        if (tb[0].getTestList() == null) {
+            warningDialog = new Warning("Неверный формат теста! Выберите корректный файл");
+            warningDialog.pack();
+            warningDialog.setVisible(true);
+        } else {
+            settingsForm.dispose();
+            Question q = tb[0].getCurrentQuestion();
+            testingForm = new QuestionForm(q.getName(), "", q.getOptions());
+            setFormTitle(testingForm, tb[0]);
+            testingForm.setSubmitActionListener(answerQuestion);
+            testingForm.setEndActionListener(endTest);
+        }
     }
 
-    public void checkAnswer(TestBuilder test, int answer) {
+    private void setFormTitle(JFrame form, TestBuilder test){
+        form.setTitle((test.getCurrentQuestionNumber() + 1) + " / " + test.size());
+    }
+
+    private void checkAnswer(TestBuilder test, int answer) {
         Question q = test.getCurrentQuestion();
         if (q.getAnswerNumber() != answer) {
             test.addWrongAnswer(q);
         }
     }
 
-    public void closeResults() {
+    private void closeResults() {
         resultsForm.dispose();
     }
 }

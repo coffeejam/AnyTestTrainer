@@ -4,25 +4,23 @@ import gemad.i.testsystem.Util;
 
 import java.util.ArrayList;
 
-/**
- * Created by 4 on 20.04.2016.
- */
 public class Question {
     private String name, testName;
     private ArrayList<String> options = new ArrayList<>();
+    private int answerNum;
     private ArrayList<Integer> order;
-    private int answerNumber, questionNumber, optionsSize;
+    private int questionNumber;
     private boolean shuffled = false;
     private final static String setBoldText = "\033[0;1m";
     private final static String setPlainText = "\033[0;0m";
 
-    public Question(String name, ArrayList<String> options, int questionNumber, int answerNumber, String testNum) {
+    public Question(String name, ArrayList<String> options, int questionNumber, int answer, String testName) {
         this.name = name;
         this.options.addAll(options);
-        this.answerNumber = answerNumber;
+        this.answerNum = answer;
         this.questionNumber = questionNumber;
-        this.testName = testNum;
-        optionsSize = options.size();
+        this.testName = testName;
+
         this.order = Util.formArray(this.size());
     }
 
@@ -44,23 +42,29 @@ public class Question {
 
     public int getAnswerNumber() {
         if (shuffled) {
-            return order.indexOf(answerNumber);
+            return order.indexOf(answerNum);
         }
-        return answerNumber;
+        return answerNum;
     }
 
-    public void setAnswerNumber(int answerNumber) {
-        this.answerNumber = answerNumber;
+    private boolean checkAnswer(int option){
+        return answerNum == option;
+    }
+
+    public void setAnswer(int answer) {
+        this.answerNum = answer;
     }
 
     public int size() {
-        return optionsSize;
+        return options.size();
     }
 
     public ArrayList<Integer> getOrder() {
         return order;
     }
 
+
+    // prints questions during test
     public void printQuestion(Question question, boolean shuffle, boolean markAnswer) {
         ArrayList<String> options = question.getOptions();
         char letter = 'а';
@@ -73,6 +77,7 @@ public class Question {
                 + options.get(this.order.get(this.order.size() - 1)) + ".\n" + setPlainText);
     }
 
+    //prints questions at the end of the test
     public String returnQuestion(Question question, boolean shuffle, boolean markAnswer) {
         StringBuilder questionText = new StringBuilder();
         ArrayList<String> options = question.getOptions();
@@ -87,16 +92,16 @@ public class Question {
         return questionText.toString();
     }
 
-    private String mark(boolean set, String bold, int answerNumber) {
-        if (set && answerNumber == this.getAnswerNumber()) {
+    private String mark(boolean set, String bold, int answer) {
+        if (set && checkAnswer(answer)) {
             return bold + "=====> ";
         } else {
             return "";
         }
     }
 
-    private String markByHtml(boolean set, int answerNumber, String text) {
-        if (set && answerNumber == this.getAnswerNumber()) {
+    private String markByHtml(boolean set, int answer, String text) {
+        if (set && checkAnswer(answer)) {
             return "<b>" + text + "</b>";
         } else {
             return text;
@@ -110,5 +115,9 @@ public class Question {
 
     public String getOption(int number) {
         return options.get(order.get(number).intValue());
+    }
+
+    public void addOption(String option){
+        options.add(option);
     }
 }
