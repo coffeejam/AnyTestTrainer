@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
+import java.awt.*;
 import java.awt.event.*;
 
 
@@ -23,6 +24,7 @@ public class SettingsDialog extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.pack();
         this.setLocation(500, 250);
+        this.setMinimumSize(this.getSize());
         this.setVisible(true);
         this.getRootPane().setDefaultButton(buttonBegin);
         openFile = new JFileChooser();
@@ -82,6 +84,10 @@ public class SettingsDialog extends JFrame {
 
     public String getChosenTest() {
         return directoryField.getText();
+    }
+
+    public void setDirectoryField(String path) {
+        directoryField.setText(path);
     }
 
 

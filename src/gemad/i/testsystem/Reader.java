@@ -4,12 +4,19 @@ import gemad.i.testsystem.Data.Question;
 import gemad.i.testsystem.Data.TestList;
 
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 
 public class Reader {
+
+    final static int MAX_IMAGE_WIDTH = 300;
+    final static int MAX_IMAGE_HEIGHT = 200;
 
     /* Test file format:
     :Test name
@@ -24,6 +31,7 @@ public class Reader {
         int type, questionNumber = 0;
         TestList test = new TestList("");// plug in case test isn't initialized
         File file = new File(filename);
+        String imageName = "";
         BufferedReader br;
         try {
             br = new BufferedReader( new InputStreamReader(new FileInputStream(filename), "windows-1251"));
@@ -52,12 +60,20 @@ public class Reader {
                         break;
                     case 2:
                         if (!questionOptions.isEmpty()) {
-                            question = new Question(questionName, questionOptions, questionNumber, questionAnswer, test.getName());
+                            question = new Question(questionName, questionOptions, questionNumber, questionAnswer, test.getName(), readImage(imageName), imageName);
                             test.addQuestion(question);
                             questionOptions.clear();
                             questionNumber++;
                         }
-                        questionName = processQuestionName(line);
+                        String questionString = processQuestionName(line);
+                        if (questionString.split(" ")[0].endsWith(".jpg")) {
+                            imageName = questionString.split(" ")[0];
+                            questionName = questionString.substring(imageName.length());
+                        }
+                            else {
+                            imageName = "";
+                            questionName = questionString;
+                        }
                         optionsCounter = 0;
 //                        if (log.isDebugEnabled())
 //                            log.debug("Read question name: " + questionName);
@@ -78,7 +94,7 @@ public class Reader {
                 }
                 line = br.readLine();
             }
-            question = new Question(questionName, questionOptions, questionNumber, questionAnswer, test.getName());
+            question = new Question(questionName, questionOptions, questionNumber, questionAnswer, test.getName(), readImage(imageName), imageName);
             test.addQuestion(question);
         } catch (IOException e) {
             e.printStackTrace();
@@ -166,5 +182,33 @@ public class Reader {
             return line;
         }
         return newLine.toString();
+    }
+
+    public static ImageIcon readImage(String imageName) {
+        float height, width;
+        int newHeight, newWidth;
+        BufferedImage img;
+        if (imageName == null || imageName.isEmpty())
+            return null;
+        try {
+            img = ImageIO.read(new File(imageName));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        height = img.getHeight();
+        width = img.getWidth();
+        float divider =1.0f;
+        if (width > MAX_IMAGE_WIDTH || height > MAX_IMAGE_HEIGHT)
+        if (width > height) {
+            divider = width/((float) MAX_IMAGE_WIDTH);
+        } else {
+            divider = height/((float) MAX_IMAGE_HEIGHT);
+        }
+        newWidth = (int) (width / divider);
+        newHeight = (int) (height / divider);
+        Image dimg = img.getScaledInstance(newWidth, newHeight,
+                Image.SCALE_SMOOTH);
+        return new ImageIcon(dimg);
     }
 }

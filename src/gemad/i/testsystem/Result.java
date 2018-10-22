@@ -4,6 +4,8 @@ import gemad.i.testsystem.Data.Question;
 import gemad.i.testsystem.Data.TestList;
 import gemad.i.testsystem.Data.TextConsts;
 
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -91,15 +93,28 @@ public class Result {
         return result;
     }
 
-    public static String returnAnswers(ArrayList<Question> answers, TestList test) {
+    public static void setAnswers(ArrayList<Question> answers, Results form) {
         Question q;
-        StringBuilder result = new StringBuilder();
         for (int i = 0; i < answers.size(); i++) {
             q = answers.get(i);
             /*q.getTestName() + "." + Change this back when several tests feature added*/
-            result.append(q.getQuestionNumber() + 1).append(" ").append(q.returnQuestion(q, false, true)).append("<br>");
+            ArrayList<String> options = q.getShuffledOptions();
+            int correctAnswer = q.getAnswerNumber();
+            try {
+                form.addToResult(q.getQuestionNumber() + 1 + ". " + q.getName() + "\n", false);
+                if (!q.getImageFileName().isEmpty()) {
+                    form.addImageToResult(q.getImage());
+                    form.addToResult("\n", false);
+                }
+                char c = 'a';
+                for (int j = 0; j < options.size(); j++, c++){
+                    form.addToResult(c + ") " + options.get(j) + "\n", j==correctAnswer);
+                }
+                form.addToResult("\n", false);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
         }
-        return result.toString();
     }
 
 

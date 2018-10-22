@@ -2,6 +2,8 @@ package gemad.i.testsystem.Data;
 
 import gemad.i.testsystem.Util;
 
+import javax.swing.*;
+import java.io.File;
 import java.util.ArrayList;
 
 public class Question {
@@ -13,13 +15,17 @@ public class Question {
     private boolean shuffled = false;
     private final static String setBoldText = "\033[0;1m";
     private final static String setPlainText = "\033[0;0m";
+    private ImageIcon image;
+    private String imageFileName;
 
-    public Question(String name, ArrayList<String> options, int questionNumber, int answer, String testName) {
+    public Question(String name, ArrayList<String> options, int questionNumber, int answer, String testName, ImageIcon image, String imageName) {
         this.name = name;
         this.options.addAll(options);
         this.answerNum = answer;
         this.questionNumber = questionNumber;
         this.testName = testName;
+        this.image = image;
+        this.imageFileName = imageName;
 
         this.order = Util.formArray(this.size());
     }
@@ -47,6 +53,10 @@ public class Question {
         return answerNum;
     }
 
+    public ImageIcon getImage() {
+        return image;
+    }
+
     private boolean checkAnswer(int option){
         return answerNum == option;
     }
@@ -71,26 +81,26 @@ public class Question {
         System.out.println(question.getName());
         for (int i = 0; i < this.order.size() - 1; i++) {
             System.out.println(mark(markAnswer, setBoldText, i) + letter++ + ")"
-                    + options.get(this.order.get(i)) + ";" + setPlainText);
+                    + options.get(this.order.get(i).intValue()) + ";" + setPlainText);
         }
         System.out.println(mark(markAnswer, setBoldText, this.order.size() - 1) + letter + ")"
                 + options.get(this.order.get(this.order.size() - 1)) + ".\n" + setPlainText);
     }
 
     //prints questions at the end of the test
-    public String returnQuestion(Question question, boolean shuffle, boolean markAnswer) {
-        StringBuilder questionText = new StringBuilder();
-        ArrayList<String> options = question.getOptions();
-        char letter = 'а';
-        questionText.append(question.getName() + "<br>");
-        for (int i = 0; i < this.order.size() - 1; i++) {
-            questionText.append(markByHtml(markAnswer, i, letter++ + ")"
-                    + options.get(this.order.get(i)) + ";<br>"));
-        }
-        questionText.append(markByHtml(markAnswer, this.order.size() - 1, letter + ")"
-                + options.get(this.order.get(this.order.size() - 1)) + ".<br>"));
-        return questionText.toString();
-    }
+//    public String returnQuestion(boolean shuffle, boolean markAnswer) {
+//        StringBuilder questionText = new StringBuilder();
+//        ArrayList<String> options = getOptions();
+//        char letter = 'а';
+//        questionText.append(getName() + "<br>");
+//        for (int i = 0; i < this.order.size() - 1; i++) {
+//            questionText.append(markByHtml(markAnswer, i, letter++ + ")"
+//                    + options.get(this.order.get(i)) + ";<br>"));
+//        }
+//        questionText.append(markByHtml(markAnswer, this.order.size() - 1, letter + ")"
+//                + options.get(this.order.get(this.order.size() - 1)) + ".<br>"));
+//        return questionText.toString();
+//    }
 
     private String mark(boolean set, String bold, int answer) {
         if (set && checkAnswer(answer)) {
@@ -100,13 +110,13 @@ public class Question {
         }
     }
 
-    private String markByHtml(boolean set, int answer, String text) {
-        if (set && checkAnswer(answer)) {
-            return "<b>" + text + "</b>";
-        } else {
-            return text;
-        }
-    }
+//    private String markByHtml(boolean set, int answer, String text) {
+//        if (set && checkAnswer(answer)) {
+//            return "<b>" + text + "</b>";
+//        } else {
+//            return text;
+//        }
+//    }
 
     public void shuffle() {
         this.order = Util.shuffleSmall(this.size());
@@ -119,5 +129,17 @@ public class Question {
 
     public void addOption(String option){
         options.add(option);
+    }
+
+    public String getImageFileName() {
+        return imageFileName;
+    }
+
+    public ArrayList<String> getShuffledOptions() {
+        ArrayList<String> shuffledOptions = new ArrayList<>();
+        for (int i = 0; i < this.order.size(); i++) {
+            shuffledOptions.add(options.get(this.order.get(i).intValue()));
+        }
+        return shuffledOptions;
     }
 }

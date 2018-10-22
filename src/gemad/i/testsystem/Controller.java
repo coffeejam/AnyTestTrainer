@@ -15,6 +15,7 @@ public class Controller {
     private QuestionForm testingForm;
     private Results resultsForm;
     private Warning warningDialog;
+    private String lastTestPath;
     private final TestBuilder[] tb = new TestBuilder[1];
     private final ActionListener answerQuestion = new ActionListener() {
         @Override
@@ -47,6 +48,8 @@ public class Controller {
 
     private void newTesting() {
         settingsForm = new SettingsDialog();
+        if (lastTestPath != null)
+        settingsForm.setDirectoryField(lastTestPath);
         settingsForm.setActionListener(startTest);
     }
 
@@ -54,28 +57,30 @@ public class Controller {
         testingForm.dispose();
         resultsForm = new Results();
         resultsForm.setStat(test);
-        resultsForm.setAnswers(test);
+        Result.setAnswers(test.getWrongAnswers(), resultsForm);
         resultsForm.scrollToTop();
         resultsForm.setActionListener(newTest);
     }
 
     private void nextQuestion(TestBuilder test) {
         Question q = test.getNextQuestion();
-        testingForm.editForm(q.getName(), "", q.getOptions());
+        testingForm.editForm(q.getName(), q.getImage(), q.getShuffledOptions());
         setFormTitle(testingForm, test);
     }
 
     private void startTest() throws IOException {
+        String filename = settingsForm.getChosenTest().trim();
         tb[0] = new TestBuilder(settingsForm.isQuestionShuffleChecked(), settingsForm.isOptionShuffleChecked(),
-                settingsForm.getChosenTest().trim());
+                filename);
         if (tb[0].getTestList() == null) {
             warningDialog = new Warning("Неверный формат теста! Выберите корректный файл");
             warningDialog.pack();
             warningDialog.setVisible(true);
         } else {
+            lastTestPath = filename;
             settingsForm.dispose();
             Question q = tb[0].getCurrentQuestion();
-            testingForm = new QuestionForm(q.getName(), "", q.getOptions());
+            testingForm = new QuestionForm(q.getName(), q.getImage(), q.getShuffledOptions());
             setFormTitle(testingForm, tb[0]);
             testingForm.setSubmitActionListener(answerQuestion);
             testingForm.setEndActionListener(endTest);
@@ -83,7 +88,8 @@ public class Controller {
     }
 
     private void setFormTitle(JFrame form, TestBuilder test){
-        form.setTitle((test.getCurrentQuestionNumber() + 1) + " / " + test.size());
+        form.setTitle((test.getCurrentQuestionNumber() + 1) + " / " + test.size() +
+                " (" + test.getCurrentQuestion().getTestName() + ")");
     }
 
     private void checkAnswer(TestBuilder test, int answer) {
