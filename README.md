@@ -14,6 +14,6 @@ The test should be located in a file with the .txt extension and have the follow
 
 Question can also include jpg image:
 
-?<path to the image> Text of the question
+? \<path to the image\> Text of the question
   
 There could be any number of options and only one right answer. If question has only one option (right answer), than other options added randomly from another questions with single answers.
