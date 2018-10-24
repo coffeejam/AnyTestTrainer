@@ -5,8 +5,11 @@ Tests are loaded into the program in the form of text files, which should be in 
 The test should be located in a file with the .txt extension and have the following appearance:
 
 :Test title
+
 ?The text of the question
+
 !the text of the right answer
+
 .the text of the wrong answer
 
 Question can also include jpg image:
