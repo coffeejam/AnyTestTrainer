@@ -7,6 +7,6 @@ public class Runner {
 
 
     public static void main(String[] args) throws IOException {
-        Controller c = new Controller();
+        Controller c = new Controller(args);
     }
 }

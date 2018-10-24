@@ -1,12 +1,18 @@
 package gemad.i.testsystem;
 
 import gemad.i.testsystem.Data.Question;
-import gemad.i.testsystem.Data.TestList;
+import gemad.i.testsystem.Data.TextConsts;
+import gemad.i.testsystem.Forms.QuestionForm;
+import gemad.i.testsystem.Forms.Results;
+import gemad.i.testsystem.Forms.SettingsDialog;
+import gemad.i.testsystem.Forms.Warning;
+import gemad.i.testsystem.Utils.Translator;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class Controller {
@@ -41,9 +47,13 @@ public class Controller {
     };
     private ActionListener endTest = e -> endTesting(tb[0]);
 
-    public Controller() {
+    public Controller(String[] args) {
+        if (args.length > 0)
+            if (args[0].endsWith(".txt"))
+                lastTestPath = args[0];
         newTesting();
     }
+
 
 
     private void newTesting() {
@@ -69,15 +79,15 @@ public class Controller {
     }
 
     private void startTest() throws IOException {
-        String filename = settingsForm.getChosenTest().trim();
+        ArrayList<String> filenames = settingsForm.getSelectedTests();
         tb[0] = new TestBuilder(settingsForm.isQuestionShuffleChecked(), settingsForm.isOptionShuffleChecked(),
-                filename);
+                filenames);
         if (tb[0].getTestList() == null) {
-            warningDialog = new Warning("Неверный формат теста! Выберите корректный файл");
+            warningDialog = new Warning(Translator.getInstance().translate(TextConsts.WRONG_TEST));
             warningDialog.pack();
             warningDialog.setVisible(true);
         } else {
-            lastTestPath = filename;
+//            lastTestPath = filename; TODO Add save list components instead
             settingsForm.dispose();
             Question q = tb[0].getCurrentQuestion();
             testingForm = new QuestionForm(q.getName(), q.getImage(), q.getShuffledOptions());

@@ -1,8 +1,9 @@
-package gemad.i.testsystem;
+package gemad.i.testsystem.Forms;
+
+import gemad.i.testsystem.Data.TextConsts;
+import gemad.i.testsystem.Utils.Translator;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Warning extends JDialog {
     private JPanel contentPane;
@@ -10,7 +11,8 @@ public class Warning extends JDialog {
     private JLabel jLabel;
 
     public Warning(String text) {
-        setName("Ошибка");
+        setTitle(Translator.getInstance().translate(TextConsts.ERROR));
+        buttonOK.setText(Translator.getInstance().translate(TextConsts.BUTTON_OK));
         setBounds(525, 275, 100, 100);
         setContentPane(contentPane);
         setModal(true);

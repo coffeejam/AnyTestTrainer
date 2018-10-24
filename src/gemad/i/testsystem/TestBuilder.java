@@ -2,10 +2,10 @@ package gemad.i.testsystem;
 
 import gemad.i.testsystem.Data.Question;
 import gemad.i.testsystem.Data.TestList;
+import gemad.i.testsystem.Utils.Util;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 
 public class TestBuilder {
@@ -16,12 +16,15 @@ public class TestBuilder {
     private ArrayList<Question> wrongAnswers = new ArrayList<>();
     private int currentQuestion = 0;
 
-    public TestBuilder(boolean doShuffleQ, boolean doShuffleO, String testFile) throws IOException {
-        final TestList test1 = Reader.readTest(testFile);
-        if (test1 == null)
-            return;
-        fillSingleQuestions(test1); //adds options where there is only one
-        test = test1; //TODO in future it will be possible to add several tests in one test ... probably
+    public TestBuilder(boolean doShuffleQ, boolean doShuffleO, ArrayList<String> testFile) throws IOException {
+        test = new TestList("");
+        for (int i = 0; i < testFile.size(); i++) {
+            TestList tempTest = Reader.readTest(testFile.get(i));
+            if (tempTest == null)
+                return;
+            fillSingleQuestions(tempTest); //adds options where there is only one
+            test.addQuestions(tempTest.getQuestions()); // merges several tests into one
+        }
         this.doShuffleQ = doShuffleQ;
         this.doShuffleO = doShuffleO;
 
@@ -120,5 +123,22 @@ public class TestBuilder {
 
     public int getCurrentQuestionNumber() {
         return currentQuestion;
+    }
+
+    public static boolean isTestFile(String filename){
+        if (filename != null && !filename.isEmpty() && filename.endsWith(".txt")) {
+            File file = new File(filename);
+            BufferedReader br;
+            try {
+                br = new BufferedReader( new InputStreamReader(new FileInputStream(filename), "windows-1251"));
+                String line = br.readLine();
+                if (line == null || !line.startsWith(":"))
+                    return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        } else return false;
     }
 }

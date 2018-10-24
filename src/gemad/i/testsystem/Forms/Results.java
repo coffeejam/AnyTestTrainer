@@ -1,16 +1,16 @@
-package gemad.i.testsystem;
+package gemad.i.testsystem.Forms;
+
+import gemad.i.testsystem.Data.TextConsts;
+import gemad.i.testsystem.Result;
+import gemad.i.testsystem.TestBuilder;
+import gemad.i.testsystem.Utils.Translator;
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
+import javax.swing.text.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.File;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 
 
 public class Results extends JFrame{
@@ -21,14 +21,17 @@ public class Results extends JFrame{
     private JLabel label1;
     private JScrollPane scrollPane1;
 
-    public Results() {
-        super("Results");
+    public Results() { //TODO repair bug: panel doesn't shrink vertically
+        super(Translator.getInstance().translate(TextConsts.RESULTS));
+        label1.setText(Translator.getInstance().translate(TextConsts.CORRECT_ANSWERS));
+        okButton.setText(Translator.getInstance().translate(TextConsts.BUTTON_OK));
         this.setContentPane(rootPanel);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setBounds(500, 250, 750, 500);
         this.setVisible(true);
         this.setMinimumSize(this.getSize());
         this.getRootPane().setDefaultButton(okButton);
+
 //        editorPane1.setContentType("text/html");
 //        this.addComponentListener(new ResizeListener());
     }
@@ -53,14 +56,18 @@ public class Results extends JFrame{
         StyledDocument doc = (StyledDocument) editorPane1.getDocument();
         Style style = doc.addStyle("StyleName", null);
         StyleConstants.setIcon(style, image);
+        StyleConstants.setLeftIndent(style, 16);
         doc.insertString(doc.getLength(), "ignored text", style);
     }
 
     public void addToResult(String text, boolean bold) throws BadLocationException {
         StyledDocument doc = editorPane1.getStyledDocument();
-        Style style = doc.addStyle("StyleName", null);
+        StyleContext context = new StyleContext();
+        Style style = context.getStyle(StyleContext.DEFAULT_STYLE);
+//        Style style = doc.addStyle("StyleName", null);
         if (bold)
         StyleConstants.setBold(style, true);
+        StyleConstants.setLeftIndent(style, 16);
         doc.insertString(doc.getLength(), text, style);
 //        doc.setParagraphAttributes(12, 1, editorPane1.getStyle("Bold"), true);
     }

@@ -3,8 +3,9 @@ package gemad.i.testsystem;
 import gemad.i.testsystem.Data.Question;
 import gemad.i.testsystem.Data.TestList;
 import gemad.i.testsystem.Data.TextConsts;
+import gemad.i.testsystem.Forms.Results;
+import gemad.i.testsystem.Utils.Translator;
 
-import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,23 +71,25 @@ public class Result {
     public static String returnStat(ArrayList<Question> answers, int questionsAnswered) {
         String result;
         if (answers.size() == questionsAnswered && questionsAnswered != 10) {
-            result = "Вау! Вы ответили на все вопросы неправильно, это что, специально?";
+            result = Translator.getInstance().translate(TextConsts.ALL_WRONG);
         } else {
             switch (answers.size()) {
                 case 0:
                     if (questionsAnswered == 10) {
-                        result = "Господи, 10 из 10! И все верно!";
+                        result = Translator.getInstance().translate(TextConsts.TEN_OUT_OF_TEN_CORRECT);
                     } else {
-                        result = "Поздравляю, вы ответили верно на все вопросы!";
+                        result = Translator.getInstance().translate(TextConsts.ALL_CORRECT);
                     }
                     return result;
                 case 10:
                     if (questionsAnswered == 10) {
-                        result = "Господи, 10 из 10! И все неправильно!";
+                        result = Translator.getInstance().translate(TextConsts.TEN_OUT_OF_TEN_WRONG);
                         break;
                     }
                 default:
-                    result = "Вы ответили неверно на " + answers.size() + " вопросов из " + questionsAnswered;
+                    result = Translator.getInstance().translate(TextConsts.YOU_ANSWERED_WRONG_PART1) + answers.size() +
+                            Translator.getInstance().translate(TextConsts.YOU_ANSWERED_WRONG_PART2) + questionsAnswered +
+                            Translator.getInstance().translate(TextConsts.YOU_ANSWERED_WRONG_PART3);
                     break;
             }
         }
@@ -108,7 +111,7 @@ public class Result {
                 }
                 char c = 'a';
                 for (int j = 0; j < options.size(); j++, c++){
-                    form.addToResult(c + ") " + options.get(j) + "\n", j==correctAnswer);
+                    form.addToResult("   " + c + ") " + options.get(j) + "\n", j==correctAnswer);
                 }
                 form.addToResult("\n", false);
             } catch (BadLocationException e) {

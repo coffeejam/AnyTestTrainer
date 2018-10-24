@@ -1,9 +1,8 @@
 package gemad.i.testsystem.Data;
 
-import gemad.i.testsystem.Util;
+import gemad.i.testsystem.Utils.Util;
 
 import javax.swing.*;
-import java.io.File;
 import java.util.ArrayList;
 
 public class Question {

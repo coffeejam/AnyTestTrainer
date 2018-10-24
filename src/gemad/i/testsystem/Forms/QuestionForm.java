@@ -1,4 +1,8 @@
-package gemad.i.testsystem;
+package gemad.i.testsystem.Forms;
+
+import gemad.i.testsystem.Data.TextConsts;
+import gemad.i.testsystem.Reader;
+import gemad.i.testsystem.Utils.Translator;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -29,8 +33,8 @@ public class QuestionForm extends JFrame {
             this.imageFile = image;
         this.options = options;
         rootPanel = new JPanel(new BorderLayout());
-        answerButton = new JButton("Ответить");
-        endButton = new JButton("Закончить");
+        answerButton = new JButton(Translator.getInstance().translate(TextConsts.BUTTON_ANSWER));
+        endButton = new JButton(Translator.getInstance().translate(TextConsts.BUTTON_FINISH));
         questionPanel = new JPanel(new BorderLayout());
         optionsPanel = new JPanel(new BorderLayout());
         buttonsPanel = new JPanel(new BorderLayout());
