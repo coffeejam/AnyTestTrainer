@@ -4,12 +4,16 @@ There is an opportunity to mix up the order of questions and the order of answer
 Tests are loaded into the program in the form of text files, which should be in the same folder with the program.
 The test should be located in a file with the .txt extension and have the following appearance:
 
-Test title
-1. The text of the question
+:Test title
 
-a) the text of the answer
+?The text of the question
 
-b) the text of another answer
+!the text of the right answer
 
+.the text of the wrong answer
 
-So far the program recognizes only three tests - test1.txt, test2.txt, test3.txt. The answers to the tests are written in the program, so you can not use this program for any purposes. In the future, it is planned to add the ability to add any tests.
+Question can also include jpg image:
+
+? \<path to the image\> Text of the question
+  
+There could be any number of options and only one right answer. If question has only one option (right answer), than other options added randomly from another questions with single answers.
