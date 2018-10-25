@@ -1,14 +1,12 @@
 package gemad.i.testsystem.Forms;
 
+import gemad.i.testsystem.Configuration;
 import gemad.i.testsystem.Data.TextConsts;
 import gemad.i.testsystem.TestBuilder;
 import gemad.i.testsystem.Utils.Translator;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
+import javax.swing.event.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -21,10 +19,9 @@ public class SettingsDialog extends JFrame {
     private JButton buttonBegin;
     private JPanel rootPanel;
     private JFileChooser openFile;
-    private JTextField directoryField;
-    private JButton openButton;
     private JButton addButton;
     private JList list1;
+    private JButton deleteButton;
     private DefaultListModel listModel;
 
     public SettingsDialog() {
@@ -32,8 +29,8 @@ public class SettingsDialog extends JFrame {
         checkBoxShuffleAns.setText(Translator.getInstance().translate(TextConsts.SHUFFLE_ANSWERS));
         checkBoxShuffleQuest.setText(Translator.getInstance().translate(TextConsts.SHUFFLE_QUESTIONS));
         buttonBegin.setText(Translator.getInstance().translate(TextConsts.BUTTON_START));
-        openButton.setText(Translator.getInstance().translate(TextConsts.BUTTON_OPEN));
         addButton.setText(Translator.getInstance().translate(TextConsts.BUTTON_ADD));
+        deleteButton.setText(Translator.getInstance().translate(TextConsts.BUTTON_DELETE));
 
         this.setContentPane(rootPanel);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -45,88 +42,29 @@ public class SettingsDialog extends JFrame {
         listModel = new DefaultListModel();
         list1.setModel(listModel);
         openFile = new JFileChooser();
-        if (directoryField.getText().isEmpty()) {
-            buttonBegin.setEnabled(false);
-            addButton.setEnabled(false);
-        }
 
         openFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
         openFile.setFileFilter(new TextFilesFilter());
-        openButton.addActionListener(e -> {
+        addButton.addActionListener(e -> {
             openFile.setDialogTitle(Translator.getInstance().translate(TextConsts.CHOOSE_FILE));
             int res = openFile.showOpenDialog(SettingsDialog.this);
             if (res == JFileChooser.APPROVE_OPTION){
-                directoryField.setText(openFile.getSelectedFile().getAbsolutePath());
-                buttonBegin.setEnabled(true);
+                String test = openFile.getSelectedFile().getAbsolutePath().trim();
+                listModel.addElement(test);
+                Configuration.getInstance().addTest(test);
             }
         });
-
-        addButton.addActionListener(e -> {
-            String path = directoryField.getText().trim();
-            listModel.addElement(path);
-        });
-
-        directoryField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                    if ("".equals(directoryField.getText())) {
-//                        buttonBegin.setEnabled(false);
-                        addButton.setEnabled(false);
-                    } else {
-//                        buttonBegin.setEnabled(true);
-                        addButton.setEnabled(true);
-                    }
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                    if ("".equals(directoryField.getText())) {
-//                        buttonBegin.setEnabled(false);
-                        addButton.setEnabled(false);
-                    }
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                    if ("".equals(directoryField.getText())) {
-//                        buttonBegin.setEnabled(false);
-                        addButton.setEnabled(false);
-                    } else {
-                        addButton.setEnabled(true);
-//                        buttonBegin.setEnabled(true);
-                    }
-            }
-        });
-
-        listModel.addListDataListener(new ListDataListener() {
-            @Override
-            public void intervalAdded(ListDataEvent e) {if (listModel.size() == 0) {
+        list1.addListSelectionListener(e -> {
+            if (list1.isSelectionEmpty()) {
                 buttonBegin.setEnabled(false);
-//                    addButton.setEnabled(false);
-            } else {
-                buttonBegin.setEnabled(true);
-//                    addButton.setEnabled(true);
-            }}
-
-            @Override
-            public void intervalRemoved(ListDataEvent e) {if (listModel.size() == 0) {
-                buttonBegin.setEnabled(false);
-//                    addButton.setEnabled(false);
-            } else {
-                buttonBegin.setEnabled(true);
-//                    addButton.setEnabled(true);
-            }}
-
-            @Override
-            public void contentsChanged(ListDataEvent e) {
-
+                deleteButton.setEnabled(false);
             }
-
+            else {
+                buttonBegin.setEnabled(true);
+                deleteButton.setEnabled(true);
+            }
         });
-    }
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
+        deleteButton.addActionListener(e -> removeSelected());
     }
 
     public boolean isQuestionShuffleChecked(){
@@ -137,18 +75,14 @@ public class SettingsDialog extends JFrame {
         return checkBoxShuffleAns.isSelected();
     }
 
-    public String getChosenTest() {
-        return directoryField.getText();
-    }
-
-    public void setDirectoryField(String path) {
-        directoryField.setText(path);
-    }
-
-
-
     public void setActionListener(ActionListener al) {
         buttonBegin.addActionListener(al);
+    }
+
+    public void setTestList(ArrayList<String> testList) {
+        for (int i = 0; i < testList.size(); i++) {
+            listModel.addElement(testList.get(i));
+        }
     }
 
     class TextFilesFilter extends FileFilter {
@@ -168,9 +102,10 @@ public class SettingsDialog extends JFrame {
     //return selected tests, if their path is right
     public ArrayList<String> getSelectedTests(){
         ArrayList<String> selected = new ArrayList<>();
-        for (int i = 0; i < listModel.getSize(); i++) {
-            selected.add((String) listModel.get(i));
-        }
+//        for (int i = 0; i < listModel.getSize(); i++) {
+//            selected.add((String) listModel.get(i));
+//        }
+        selected.addAll(list1.getSelectedValuesList());
         boolean[] remove = new boolean[selected.size()];
         for (int i = 0; i < selected.size(); i++) {
             remove[i] = !TestBuilder.isTestFile(selected.get(i));
@@ -179,6 +114,22 @@ public class SettingsDialog extends JFrame {
             if (remove[i]) selected.remove(i);
         }
         return selected;
+    }
+
+    public ArrayList<String> getTestList() {
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < listModel.getSize(); i++) {
+            list.add((String) listModel.get(i));
+        }
+        return list;
+    }
+
+    private void removeSelected(){
+        int[] selection = list1.getSelectedIndices();
+        for (int i = selection.length-1; i >= 0; i--) {
+            listModel.remove(selection[i]);
+            Configuration.getInstance().removeTest((String) listModel.get(i));
+        }
     }
 
 }

@@ -32,4 +32,5 @@ public class TextConsts {
     public static final String[] BUTTON_OPEN = {"Open", "Обзор"};
 
     public static final String[] BUTTON_ADD = {"Add", "Добавить"};
+    public static final String[] BUTTON_DELETE = {"Delete", "Удалить"};
 }

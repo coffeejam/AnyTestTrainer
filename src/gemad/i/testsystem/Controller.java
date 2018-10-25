@@ -21,7 +21,7 @@ public class Controller {
     private QuestionForm testingForm;
     private Results resultsForm;
     private Warning warningDialog;
-    private String lastTestPath;
+    private ArrayList<String> testPaths;
     private final TestBuilder[] tb = new TestBuilder[1];
     private final ActionListener answerQuestion = new ActionListener() {
         @Override
@@ -48,9 +48,11 @@ public class Controller {
     private ActionListener endTest = e -> endTesting(tb[0]);
 
     public Controller(String[] args) {
-        if (args.length > 0)
-            if (args[0].endsWith(".txt"))
-                lastTestPath = args[0];
+        Translator.getInstance().setLanguage(Configuration.getInstance().getLanguage());
+//        testPaths = new ArrayList<>();
+//        if (args.length > 0)
+//            if (args[0].endsWith(".txt"))
+//                testPaths.add(args[0]);
         newTesting();
     }
 
@@ -58,8 +60,9 @@ public class Controller {
 
     private void newTesting() {
         settingsForm = new SettingsDialog();
-        if (lastTestPath != null)
-        settingsForm.setDirectoryField(lastTestPath);
+        ArrayList<String> tests = Configuration.getInstance().getTests();
+        if (tests != null && !tests.isEmpty())
+        settingsForm.setTestList(tests);
         settingsForm.setActionListener(startTest);
     }
 
@@ -87,7 +90,7 @@ public class Controller {
             warningDialog.pack();
             warningDialog.setVisible(true);
         } else {
-//            lastTestPath = filename; TODO Add save list components instead
+//            testPaths = settingsForm.getTestList(); //saving testList for the next time
             settingsForm.dispose();
             Question q = tb[0].getCurrentQuestion();
             testingForm = new QuestionForm(q.getName(), q.getImage(), q.getShuffledOptions());

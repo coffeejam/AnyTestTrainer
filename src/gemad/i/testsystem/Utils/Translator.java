@@ -3,8 +3,8 @@ package gemad.i.testsystem.Utils;
 
 public class Translator {
     private final static Translator translator = new Translator(Translator.RUSSIAN);
-    final static int ENGLISH = 0;
-    final static int RUSSIAN = 1;
+    public final static int ENGLISH = 0;
+    public final static int RUSSIAN = 1;
     private int language;
 
     private Translator(int language) {
