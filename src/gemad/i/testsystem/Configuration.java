@@ -126,4 +126,8 @@ public class Configuration {
     public int getLanguage() {
         return language;
     }
+
+    public String getCharset() {
+        return charset;
+    }
 }

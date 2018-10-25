@@ -17,6 +17,7 @@ public class Reader {
 
     final static int MAX_IMAGE_WIDTH = 300;
     final static int MAX_IMAGE_HEIGHT = 200;
+    private String charset;
 
     /* Test file format:
     :Test name
@@ -25,16 +26,19 @@ public class Reader {
     .answer
     !right answer
      */
+    public Reader(){
+        this.charset = Configuration.getInstance().getCharset();
+    }
 
     //private static final Logger log = LogManager.getLogger(Reader.class);
-    public static TestList readTest(String filename) {
+    public TestList readTest(String filename) {
         int type, questionNumber = 0;
         TestList test = new TestList("");// plug in case test isn't initialized
         File file = new File(filename);
         String imageName = "";
         BufferedReader br;
         try {
-            br = new BufferedReader( new InputStreamReader(new FileInputStream(filename), "windows-1251"));
+            br = new BufferedReader( new InputStreamReader(new FileInputStream(filename), charset));
         } catch (UnsupportedEncodingException | FileNotFoundException e) {
             e.printStackTrace();
             return null;

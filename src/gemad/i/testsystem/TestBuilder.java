@@ -1,5 +1,6 @@
 package gemad.i.testsystem;
 
+import com.sun.org.apache.regexp.internal.RE;
 import gemad.i.testsystem.Data.Question;
 import gemad.i.testsystem.Data.TestList;
 import gemad.i.testsystem.Utils.Util;
@@ -18,8 +19,9 @@ public class TestBuilder {
 
     public TestBuilder(boolean doShuffleQ, boolean doShuffleO, ArrayList<String> testFile) throws IOException {
         test = new TestList("");
+        Reader r = new Reader();
         for (int i = 0; i < testFile.size(); i++) {
-            TestList tempTest = Reader.readTest(testFile.get(i));
+            TestList tempTest = r.readTest(testFile.get(i));
             if (tempTest == null)
                 return;
             fillSingleQuestions(tempTest); //adds options where there is only one
