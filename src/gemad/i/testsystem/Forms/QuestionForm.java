@@ -85,6 +85,7 @@ public class QuestionForm extends JFrame {
             questionScroll = new JScrollPane(image);
         } else if (this.question != null && !this.question.isEmpty()) {
             textArea1 = new JTextArea(question);
+            textArea1.setFont(new Font("Calibri", Font.PLAIN, 14));
             textArea1.setEditable(false);
             questionScroll = new JScrollPane(textArea1);
         } else return;

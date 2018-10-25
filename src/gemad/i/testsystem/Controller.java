@@ -15,14 +15,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class Controller {
-    TestBuilder test;
+class Controller {
     private SettingsDialog settingsForm;
     private QuestionForm testingForm;
     private Results resultsForm;
-    private Warning warningDialog;
-    private ArrayList<String> testPaths;
-    private final TestBuilder[] tb = new TestBuilder[1];
+        private final TestBuilder[] tb = new TestBuilder[1];
     private final ActionListener answerQuestion = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -47,7 +44,7 @@ public class Controller {
     };
     private ActionListener endTest = e -> endTesting(tb[0]);
 
-    public Controller(String[] args) {
+    Controller(String[] args) {
         Translator.getInstance().setLanguage(Configuration.getInstance().getLanguage());
 //        testPaths = new ArrayList<>();
 //        if (args.length > 0)
@@ -86,9 +83,8 @@ public class Controller {
         tb[0] = new TestBuilder(settingsForm.isQuestionShuffleChecked(), settingsForm.isOptionShuffleChecked(),
                 filenames);
         if (tb[0].getTestList() == null) {
-            warningDialog = new Warning(Translator.getInstance().translate(TextConsts.WRONG_TEST));
+            new Warning(Translator.getInstance().translate(TextConsts.WRONG_TEST));
         } else {
-//            testPaths = settingsForm.getTestList(); //saving testList for the next time
             settingsForm.dispose();
             Question q = tb[0].getCurrentQuestion();
             testingForm = new QuestionForm(q.getName(), q.getImage(), q.getShuffledOptions());

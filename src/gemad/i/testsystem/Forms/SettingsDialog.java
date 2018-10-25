@@ -32,6 +32,7 @@ public class SettingsDialog extends JFrame {
         addButton.setText(Translator.getInstance().translate(TextConsts.BUTTON_ADD));
         deleteButton.setText(Translator.getInstance().translate(TextConsts.BUTTON_DELETE));
 
+
         this.setContentPane(rootPanel);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.pack();
@@ -54,7 +55,7 @@ public class SettingsDialog extends JFrame {
                     listModel.addElement(test);
                     Configuration.getInstance().addTest(test);
                 } else {
-                    new Warning("Тест уже добавлен в список");
+                    new Warning(Translator.getInstance().translate(TextConsts.TEST_EXIST));
                 }
             }
         });

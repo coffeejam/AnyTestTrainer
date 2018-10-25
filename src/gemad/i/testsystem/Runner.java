@@ -1,5 +1,6 @@
 package gemad.i.testsystem;
 
+import javax.swing.*;
 import java.io.IOException;
 
 
@@ -7,7 +8,12 @@ public class Runner {
 
 
     public static void main(String[] args) throws IOException {
-        Controller c = new Controller(args);
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        new Controller(args);
         Runtime.getRuntime().addShutdownHook(new saveThread());
     }
 

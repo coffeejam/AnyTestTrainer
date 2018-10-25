@@ -15,8 +15,8 @@ import java.util.ArrayList;
 
 public class Reader {
 
-    final static int MAX_IMAGE_WIDTH = 600;
-    final static int MAX_IMAGE_HEIGHT = 400;
+    private final static int MAX_IMAGE_WIDTH = 600;
+    private final static int MAX_IMAGE_HEIGHT = 400;
     private String charset;
 
     /* Test file format:
@@ -26,12 +26,12 @@ public class Reader {
     .answer
     !right answer
      */
-    public Reader(){
+    Reader(){
         this.charset = Configuration.getInstance().getCharset();
     }
 
     //private static final Logger log = LogManager.getLogger(Reader.class);
-    public TestList readTest(String filename) {
+    TestList readTest(String filename) {
         int type, questionNumber = 0;
         TestList test = new TestList("");// plug in case test isn't initialized
         File file = new File(filename);
@@ -211,8 +211,7 @@ public class Reader {
         }
         newWidth = (int) (width / divider);
         newHeight = (int) (height / divider);
-        Image dimg = img.getScaledInstance(newWidth, newHeight,
-                Image.SCALE_SMOOTH);
+        Image dimg = img.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
         return new ImageIcon(dimg);
     }
 }

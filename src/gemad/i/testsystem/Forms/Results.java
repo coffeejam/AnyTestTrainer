@@ -7,6 +7,7 @@ import gemad.i.testsystem.Utils.Translator;
 
 import javax.swing.*;
 import javax.swing.text.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -21,10 +22,11 @@ public class Results extends JFrame{
     private JLabel label1;
     private JScrollPane scrollPane1;
 
-    public Results() { //TODO repair bug: panel doesn't shrink vertically
+    public Results() { //TODO repair bug: panel doesn't shrink horizontally
         super(Translator.getInstance().translate(TextConsts.RESULTS));
         label1.setText(Translator.getInstance().translate(TextConsts.CORRECT_ANSWERS));
         okButton.setText(Translator.getInstance().translate(TextConsts.BUTTON_OK));
+        textArea2.setFont(new Font("Calibri", Font.PLAIN, 14));
         this.setContentPane(rootPanel);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setBounds(500, 250, 750, 500);
