@@ -20,6 +20,8 @@ public class Warning extends JDialog {
         jLabel.setText(text);
 
         buttonOK.addActionListener(e -> onOK());
+        this.pack();
+        this.setVisible(true);
     }
 
     private void onOK() {

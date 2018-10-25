@@ -87,8 +87,6 @@ public class Controller {
                 filenames);
         if (tb[0].getTestList() == null) {
             warningDialog = new Warning(Translator.getInstance().translate(TextConsts.WRONG_TEST));
-            warningDialog.pack();
-            warningDialog.setVisible(true);
         } else {
 //            testPaths = settingsForm.getTestList(); //saving testList for the next time
             settingsForm.dispose();

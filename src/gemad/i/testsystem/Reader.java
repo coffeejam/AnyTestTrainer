@@ -15,8 +15,8 @@ import java.util.ArrayList;
 
 public class Reader {
 
-    final static int MAX_IMAGE_WIDTH = 300;
-    final static int MAX_IMAGE_HEIGHT = 200;
+    final static int MAX_IMAGE_WIDTH = 600;
+    final static int MAX_IMAGE_HEIGHT = 400;
     private String charset;
 
     /* Test file format:

@@ -50,8 +50,12 @@ public class SettingsDialog extends JFrame {
             int res = openFile.showOpenDialog(SettingsDialog.this);
             if (res == JFileChooser.APPROVE_OPTION){
                 String test = openFile.getSelectedFile().getAbsolutePath().trim();
-                listModel.addElement(test);
-                Configuration.getInstance().addTest(test);
+                if (!listModel.contains(test)) {
+                    listModel.addElement(test);
+                    Configuration.getInstance().addTest(test);
+                } else {
+                    new Warning("Тест уже добавлен в список");
+                }
             }
         });
         list1.addListSelectionListener(e -> {
