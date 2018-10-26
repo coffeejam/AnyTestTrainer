@@ -43,9 +43,8 @@ public class QuestionForm extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setBounds(500, 250, 750, 500);
         this.setMinimumSize(new Dimension(500, 400));
-        this.setVisible(true);
         this.getRootPane().setDefaultButton(answerButton);
-
+        this.setVisible(true);
     }
 
     private void rootPanelInit() {

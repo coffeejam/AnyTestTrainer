@@ -22,7 +22,7 @@ public class Results extends JFrame{
     private JLabel label1;
     private JScrollPane scrollPane1;
 
-    public Results() { //TODO repair bug: panel doesn't shrink horizontally
+    public Results() {
         super(Translator.getInstance().translate(TextConsts.RESULTS));
         label1.setText(Translator.getInstance().translate(TextConsts.CORRECT_ANSWERS));
         okButton.setText(Translator.getInstance().translate(TextConsts.BUTTON_OK));
@@ -30,12 +30,12 @@ public class Results extends JFrame{
         this.setContentPane(rootPanel);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setBounds(500, 250, 750, 500);
-        this.setVisible(true);
         this.setMinimumSize(this.getSize());
         this.getRootPane().setDefaultButton(okButton);
 
 //        editorPane1.setContentType("text/html");
 //        this.addComponentListener(new ResizeListener());
+        this.setVisible(true);
     }
 
     public void setActionListener(ActionListener newTest) {
@@ -83,14 +83,8 @@ public class Results extends JFrame{
 
 
 
-    public static void main(String[] args) throws MalformedURLException, BadLocationException {
+    public static void main(String[] args) {
 
         Results form = new Results();
-
-        form.addToResult("Не жирная \n", false);
-        form.addToResult("Жирная \n", true);
-        form.addToResult("Снова не жирная \n", false);
-        form.pack();
-        form.setVisible(true);
     }
 }

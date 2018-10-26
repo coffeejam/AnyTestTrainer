@@ -35,10 +35,7 @@ public class SettingsDialog extends JFrame {
 
         this.setContentPane(rootPanel);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.pack();
-        this.setLocation(500, 250);
-        this.setMinimumSize(this.getSize());
-        this.setVisible(true);
+
         this.getRootPane().setDefaultButton(buttonBegin);
         listModel = new DefaultListModel();
         list1.setModel(listModel);
@@ -70,6 +67,12 @@ public class SettingsDialog extends JFrame {
             }
         });
         deleteButton.addActionListener(e -> removeSelected());
+
+        this.pack();
+        this.setBounds(500, 250, 500, 250);
+//        this.setLocation(500, 250);
+        this.setMinimumSize(this.getSize());
+        this.setVisible(true);
     }
 
     public boolean isQuestionShuffleChecked(){
