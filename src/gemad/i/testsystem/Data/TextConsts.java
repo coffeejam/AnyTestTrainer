@@ -34,4 +34,5 @@ public class TextConsts {
     public static final String[] BUTTON_ADD = {"Add", "Добавить"};
     public static final String[] BUTTON_DELETE = {"Delete", "Удалить"};
     public static final String[] TEST_EXIST = {"Test is already added to the list", "Тест уже добавлен в список"};
+    public static final String[] IMAGE_MISSING = {"Image file missing", "Изображение отсутствует"};
 }

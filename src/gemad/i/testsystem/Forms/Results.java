@@ -1,5 +1,6 @@
 package gemad.i.testsystem.Forms;
 
+import gemad.i.testsystem.Data.ImageWrap;
 import gemad.i.testsystem.Data.TextConsts;
 import gemad.i.testsystem.Result;
 import gemad.i.testsystem.TestBuilder;
@@ -54,12 +55,17 @@ public class Results extends JFrame{
         editorPane1.setCaretPosition(0);
     }
 
-    public void addImageToResult(ImageIcon image) throws BadLocationException {
+    public void addImageToResult(ImageWrap imageWrap) throws BadLocationException {
+        if (imageWrap.getImage() == null)
+            addToResult("[" + imageWrap.getName() + "]", false);
+        else {
         StyledDocument doc = (StyledDocument) editorPane1.getDocument();
         Style style = doc.addStyle("StyleName", null);
-        StyleConstants.setIcon(style, image);
-        StyleConstants.setLeftIndent(style, 16);
-        doc.insertString(doc.getLength(), "ignored text", style);
+
+            StyleConstants.setIcon(style, imageWrap.getImage());
+            StyleConstants.setLeftIndent(style, 16);
+            doc.insertString(doc.getLength(), "ignored text", style);
+        }
     }
 
     public void addToResult(String text, boolean bold) throws BadLocationException {

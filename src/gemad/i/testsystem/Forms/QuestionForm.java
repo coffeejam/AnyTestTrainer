@@ -1,5 +1,7 @@
 package gemad.i.testsystem.Forms;
 
+import gemad.i.testsystem.Data.ImageWrap;
+import gemad.i.testsystem.Data.Question;
 import gemad.i.testsystem.Data.TextConsts;
 import gemad.i.testsystem.Reader;
 import gemad.i.testsystem.Utils.Translator;
@@ -20,18 +22,18 @@ public class QuestionForm extends JFrame {
     private JPanel optionsPanel;
     private JPanel buttonsPanel;
     private String question;
-    ImageIcon imageFile;
+    ImageWrap imageFile;
     private ArrayList<String> options;
     private ButtonGroup buttonGroup;
     private ArrayList<JRadioButton> radioButtons;
 
-    public QuestionForm(String question, ImageIcon image, ArrayList<String> options) {
+    public QuestionForm(Question q) {
         super("");
-        if (!question.isEmpty())
-            this.question = question;
-        if (image != null)
-            this.imageFile = image;
-        this.options = options;
+//        if (!question.isEmpty())
+        this.question = q.getName();
+//        if (q.getImage() != null)
+        this.imageFile = q.getImage();
+        this.options = q.getShuffledOptions();
         rootPanel = new JPanel(new BorderLayout());
         answerButton = new JButton(Translator.getInstance().translate(TextConsts.BUTTON_ANSWER));
         endButton = new JButton(Translator.getInstance().translate(TextConsts.BUTTON_FINISH));
@@ -71,16 +73,16 @@ public class QuestionForm extends JFrame {
         Box questionBox = Box.createHorizontalBox();
         questionPanel.add(questionBox);
         JScrollPane questionScroll;
-        if (this.imageFile != null) {
+        if (this.imageFile != null) { // if imagewrap is in this question
             JLabel image;
-            if (this.question != null && !this.question.isEmpty()) {
-                image = new JLabel(this.question, imageFile, JLabel.CENTER);
-                image.setVerticalTextPosition(JLabel.TOP);
-                image.setHorizontalTextPosition(SwingConstants.CENTER);
-            }
-            else
-                image = new JLabel(imageFile);
-
+                if (imageFile.getImage() != null) { //if imageicon is there
+                    image = new JLabel(this.question, imageFile.getImage(), JLabel.CENTER);
+                    image.setVerticalTextPosition(JLabel.TOP);
+                    image.setHorizontalTextPosition(SwingConstants.CENTER);
+                } else {
+                    image = new JLabel(this.question + "\n[" + imageFile.getName() + "]");
+                    image.setHorizontalAlignment(SwingConstants.CENTER);
+                }
             questionScroll = new JScrollPane(image);
         } else if (this.question != null && !this.question.isEmpty()) {
             textArea1 = new JTextArea(question);
@@ -106,7 +108,7 @@ public class QuestionForm extends JFrame {
             buttonGroup.add(radioButtons.get(i));
         }
         radioButtons.get(0).setSelected(true);
-        optionsPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE,500));// just to fix the size
+        optionsPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 500));// just to fix the size
         optionsPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
     }
 
@@ -121,7 +123,7 @@ public class QuestionForm extends JFrame {
         buttonsBox.add(Box.createRigidArea(new Dimension(200, 0)));
         buttonsBox.add(Box.createHorizontalGlue());
         buttonsBox.add(answerButton);
-        buttonsPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE,500));// just to fix the size
+        buttonsPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 500));// just to fix the size
         buttonsPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
     }
 
@@ -147,11 +149,11 @@ public class QuestionForm extends JFrame {
     }
 
     //creates form with needed parameters for a question
-    public void editForm(String question, ImageIcon image, ArrayList<String> options) {
+    public void editForm(String question, ImageWrap imageWrap, ArrayList<String> options) {
 //        if (!question.isEmpty())
         this.question = question;
 //        if (image != null)
-        this.imageFile = image;
+        this.imageFile = imageWrap;
         this.options = options;
         questionPanel.removeAll();
         questionPanel.invalidate();
@@ -170,9 +172,7 @@ public class QuestionForm extends JFrame {
         ArrayList<String> options = new ArrayList<>();
         options.add("Вариант 1");
         options.add("Вариант 2");
-        QuestionForm form = new QuestionForm("", Reader.readImage("image.jpg"), options);
-        form.pack();
-        form.setVisible(true);
+//        QuestionForm form = new QuestionForm("", Reader.readImage("image.jpg"), options);
 
     }
 

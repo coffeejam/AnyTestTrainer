@@ -2,7 +2,6 @@ package gemad.i.testsystem.Data;
 
 import gemad.i.testsystem.Utils.Util;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 public class Question {
@@ -14,17 +13,17 @@ public class Question {
     private boolean shuffled = false;
     private final static String setBoldText = "\033[0;1m";
     private final static String setPlainText = "\033[0;0m";
-    private ImageIcon image;
-    private String imageFileName;
+    private ImageWrap imageWrap;
 
-    public Question(String name, ArrayList<String> options, int questionNumber, int answer, String testName, ImageIcon image, String imageName) {
+
+    public Question(String name, ArrayList<String> options, int questionNumber, int answer, String testName,
+                    ImageWrap imageWrap) {
         this.name = name;
         this.options.addAll(options);
         this.answerNum = answer;
         this.questionNumber = questionNumber;
         this.testName = testName;
-        this.image = image;
-        this.imageFileName = imageName;
+        this.imageWrap = imageWrap;
 
         this.order = Util.formArray(this.size());
     }
@@ -52,8 +51,8 @@ public class Question {
         return answerNum;
     }
 
-    public ImageIcon getImage() {
-        return image;
+    public ImageWrap getImage() {
+        return imageWrap;
     }
 
     private boolean checkAnswer(int option){
@@ -128,10 +127,6 @@ public class Question {
 
     public void addOption(String option){
         options.add(option);
-    }
-
-    public String getImageFileName() {
-        return imageFileName;
     }
 
     public ArrayList<String> getShuffledOptions() {

@@ -1,5 +1,6 @@
 package gemad.i.testsystem;
 
+import gemad.i.testsystem.Data.ImageWrap;
 import gemad.i.testsystem.Data.Question;
 import gemad.i.testsystem.Data.TestList;
 
@@ -64,7 +65,9 @@ public class Reader {
                         break;
                     case 2:
                         if (!questionOptions.isEmpty()) {
-                            question = new Question(questionName, questionOptions, questionNumber, questionAnswer, test.getName(), readImage(imageName), imageName);
+                            ImageIcon i = readImage(imageName);
+                            question = new Question(questionName, questionOptions, questionNumber, questionAnswer,
+                                    test.getName(), new ImageWrap(i, imageName));
                             test.addQuestion(question);
                             questionOptions.clear();
                             questionNumber++;
@@ -98,7 +101,9 @@ public class Reader {
                 }
                 line = br.readLine();
             }
-            question = new Question(questionName, questionOptions, questionNumber, questionAnswer, test.getName(), readImage(imageName), imageName);
+            ImageIcon i = readImage(imageName);
+            question = new Question(questionName, questionOptions, questionNumber, questionAnswer,
+                    test.getName(),  new ImageWrap(i, imageName));
             test.addQuestion(question);
         } catch (IOException e) {
             e.printStackTrace();
@@ -197,7 +202,7 @@ public class Reader {
         try {
             img = ImageIO.read(new File(imageName));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Cannot read image file");
             return null;
         }
         height = img.getHeight();

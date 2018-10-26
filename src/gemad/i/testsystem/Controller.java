@@ -87,7 +87,7 @@ class Controller {
         } else {
             settingsForm.dispose();
             Question q = tb[0].getCurrentQuestion();
-            testingForm = new QuestionForm(q.getName(), q.getImage(), q.getShuffledOptions());
+            testingForm = new QuestionForm(q);
             setFormTitle(testingForm, tb[0]);
             testingForm.setSubmitActionListener(answerQuestion);
             testingForm.setEndActionListener(endTest);
