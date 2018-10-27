@@ -43,4 +43,8 @@ public class Util {
         }
         return numbers;
     }
+
+    public static String surroundWithHtml(String line){
+        return "<html>" + line + "</html>";
+    }
 }

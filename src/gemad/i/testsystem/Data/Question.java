@@ -136,4 +136,8 @@ public class Question {
         }
         return shuffledOptions;
     }
+
+    public boolean hasImage() {
+        return !imageWrap.getPath().isEmpty();
+    }
 }

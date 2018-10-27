@@ -105,7 +105,7 @@ public class Result {
             int correctAnswer = q.getAnswerNumber();
             try {
                 form.addToResult(q.getQuestionNumber() + 1 + ". " + q.getName() + "\n", false);
-                if (q.getImage() != null) {
+                if (q.hasImage()) {
                     form.addImageToResult(q.getImage());
                     form.addToResult("\n", false);
                 }

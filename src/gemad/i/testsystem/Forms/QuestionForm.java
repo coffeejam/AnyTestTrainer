@@ -5,6 +5,7 @@ import gemad.i.testsystem.Data.Question;
 import gemad.i.testsystem.Data.TextConsts;
 import gemad.i.testsystem.Reader;
 import gemad.i.testsystem.Utils.Translator;
+import gemad.i.testsystem.Utils.Util;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -32,6 +33,7 @@ public class QuestionForm extends JFrame {
 //        if (!question.isEmpty())
         this.question = q.getName();
 //        if (q.getImage() != null)
+        if (q.hasImage())
         this.imageFile = q.getImage();
         this.options = q.getShuffledOptions();
         rootPanel = new JPanel(new BorderLayout());
@@ -80,7 +82,8 @@ public class QuestionForm extends JFrame {
                     image.setVerticalTextPosition(JLabel.TOP);
                     image.setHorizontalTextPosition(SwingConstants.CENTER);
                 } else {
-                    image = new JLabel(this.question + "\n[" + imageFile.getName() + "]");
+                    image = new JLabel(Util.surroundWithHtml(this.question + "<br/>[" + imageFile.getName() + "]"));
+
                     image.setHorizontalAlignment(SwingConstants.CENTER);
                 }
             questionScroll = new JScrollPane(image);

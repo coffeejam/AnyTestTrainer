@@ -1,5 +1,6 @@
 package gemad.i.testsystem;
 
+import gemad.i.testsystem.Data.ImageWrap;
 import gemad.i.testsystem.Data.Question;
 import gemad.i.testsystem.Data.TextConsts;
 import gemad.i.testsystem.Forms.QuestionForm;
@@ -74,7 +75,7 @@ class Controller {
 
     private void nextQuestion(TestBuilder test) {
         Question q = test.getNextQuestion();
-        testingForm.editForm(q.getName(), q.getImage(), q.getShuffledOptions());
+        testingForm.editForm(q.getName(), q.hasImage() ? q.getImage() : null, q.getShuffledOptions());
         setFormTitle(testingForm, test);
     }
 
