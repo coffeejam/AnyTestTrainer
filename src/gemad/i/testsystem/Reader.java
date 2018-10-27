@@ -27,7 +27,7 @@ public class Reader {
     .answer
     !right answer
      */
-    Reader(){
+    Reader() {
         this.charset = Configuration.getInstance().getCharset();
     }
 
@@ -36,15 +36,17 @@ public class Reader {
         int type, questionNumber = 0;
         TestList test = new TestList("");// plug in case test isn't initialized
         File file = new File(filename);
-        String imageName = "";
+        String imagePath = "";
         BufferedReader br;
         try {
-            br = new BufferedReader( new InputStreamReader(new FileInputStream(filename), charset));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), charset));
         } catch (UnsupportedEncodingException | FileNotFoundException e) {
             e.printStackTrace();
             return null;
         }
 
+        String absolutePath = file.getAbsolutePath(); // for making image absolute path
+        String folderPath = absolutePath.substring(0, absolutePath.length() - file.getName().length());
         String questionName = "";
         ArrayList<String> questionOptions = new ArrayList<>();
         int questionAnswer = 0;
@@ -52,7 +54,7 @@ public class Reader {
         String line;
         try {
             line = br.readLine();
-            if (line == null || !line.startsWith(":")){
+            if (line == null || !line.startsWith(":")) {
                 System.out.println("Not a test file!");
                 return null; // Если файл не начинается с : , метод возвращает вместо теста null
             }
@@ -65,20 +67,21 @@ public class Reader {
                         break;
                     case 2:
                         if (!questionOptions.isEmpty()) {
-                            ImageIcon i = readImage(imageName);
+                            ImageIcon i = readImage(imagePath);
                             question = new Question(questionName, questionOptions, questionNumber, questionAnswer,
-                                    test.getName(), new ImageWrap(i, imageName));
+                                    test.getName(), new ImageWrap(i, imagePath));
                             test.addQuestion(question);
                             questionOptions.clear();
                             questionNumber++;
                         }
                         String questionString = processQuestionName(line);
-                        if (questionString.split(" ")[0].endsWith(".jpg")) {
-                            imageName = questionString.split(" ")[0];
+                        String imageName = questionString.split(" ")[0];
+                        if (imageName.endsWith(".jpg")) {
+                            if (!isAbsolutePath(imageName))
+                                imagePath = folderPath + File.separator + imageName;
                             questionName = questionString.substring(imageName.length());
-                        }
-                            else {
-                            imageName = "";
+                        } else {
+                            imagePath = "";
                             questionName = questionString;
                         }
                         optionsCounter = 0;
@@ -101,9 +104,9 @@ public class Reader {
                 }
                 line = br.readLine();
             }
-            ImageIcon i = readImage(imageName);
+            ImageIcon i = readImage(imagePath);
             question = new Question(questionName, questionOptions, questionNumber, questionAnswer,
-                    test.getName(),  new ImageWrap(i, imageName));
+                    test.getName(), new ImageWrap(i, imagePath));
             test.addQuestion(question);
         } catch (IOException e) {
             e.printStackTrace();
@@ -125,7 +128,7 @@ public class Reader {
         final char testName = ':', questionName = '?', option = '.', answer = '!';
         if (line == null || line.isEmpty())
             return 0;
-        switch (line.charAt(0)){
+        switch (line.charAt(0)) {
             case testName:
                 return 1;
             case questionName:
@@ -154,16 +157,22 @@ public class Reader {
         return processLine(line);
     }
 
+    private static boolean isAbsolutePath(String filepath) {
+        if (filepath.length() < 4)
+            return false;
+        return filepath.substring(1, 2).equals(":"); //for Windows only todo make universal
+    }
+
     private static String processQuestionName(String line) {
         return processLine(line);
     }
 
-    private static String processTestName(String line){
+    private static String processTestName(String line) {
         return processLine(line);
     }
 
     // function for all types of lines in test file
-    private static String processLine(String line){
+    private static String processLine(String line) {
         if (line == null || line.isEmpty())
             return line;
         return line.substring(1, line.length());
@@ -207,13 +216,13 @@ public class Reader {
         }
         height = img.getHeight();
         width = img.getWidth();
-        float divider =1.0f;
+        float divider = 1.0f;
         if (width > MAX_IMAGE_WIDTH || height > MAX_IMAGE_HEIGHT)
-        if (width > height) {
-            divider = width/((float) MAX_IMAGE_WIDTH);
-        } else {
-            divider = height/((float) MAX_IMAGE_HEIGHT);
-        }
+            if (width > height) {
+                divider = width / ((float) MAX_IMAGE_WIDTH);
+            } else {
+                divider = height / ((float) MAX_IMAGE_HEIGHT);
+            }
         newWidth = (int) (width / divider);
         newHeight = (int) (height / divider);
         Image dimg = img.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
