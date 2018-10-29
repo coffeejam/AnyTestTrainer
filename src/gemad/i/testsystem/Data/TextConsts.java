@@ -20,9 +20,8 @@ public class TextConsts {
             "Поздравляю, вы ответили верно на все вопросы!"};
     public static final String[] TEN_OUT_OF_TEN_WRONG = {"My god, 10 out of 10! And everything is incorrect!",
             "Господи, 10 из 10! И все неправильно!"};
-    public static final String[] YOU_ANSWERED_WRONG_PART1 = {"You answered ", "Вы неправильно ответили на "};
-    public static final String[] YOU_ANSWERED_WRONG_PART2 = {" questions out of ", " вопросов из "};
-    public static final String[] YOU_ANSWERED_WRONG_PART3 = {" wrong", ""};
+    public static final String[] YOU_ANSWERED_WRONG = {"You answered %d questions out of %d wrong",
+            "Вы неправильно ответили на %d вопросов из %d"};
     public static final String[] WRONG_TEST = {"Wrong test file format! Choose correct file",
             "Неверный формат теста! Выберите корректный файл"};
     public static final String[] TEXT_FILES = {"Text files", "Текстовые файлы"};

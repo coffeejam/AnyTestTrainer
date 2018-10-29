@@ -218,14 +218,13 @@ public class Reader {
         width = img.getWidth();
         float divider = 1.0f;
         if (width > MAX_IMAGE_WIDTH || height > MAX_IMAGE_HEIGHT)
-            if (width > height) {
-                divider = width / ((float) MAX_IMAGE_WIDTH);
-            } else {
-                divider = height / ((float) MAX_IMAGE_HEIGHT);
-            }
+            divider = width > height ? width / ((float) MAX_IMAGE_WIDTH) :
+                    height / ((float) MAX_IMAGE_HEIGHT);
+
         newWidth = (int) (width / divider);
         newHeight = (int) (height / divider);
         Image dimg = img.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
         return new ImageIcon(dimg);
     }
+
 }

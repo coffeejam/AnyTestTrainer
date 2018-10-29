@@ -87,9 +87,8 @@ public class Result {
                         break;
                     }
                 default:
-                    result = Translator.getInstance().translate(TextConsts.YOU_ANSWERED_WRONG_PART1) + answers.size() +
-                            Translator.getInstance().translate(TextConsts.YOU_ANSWERED_WRONG_PART2) + questionsAnswered +
-                            Translator.getInstance().translate(TextConsts.YOU_ANSWERED_WRONG_PART3);
+                    result = String.format(Translator.getInstance().translate(TextConsts.YOU_ANSWERED_WRONG),
+                            answers.size(), questionsAnswered);
                     break;
             }
         }
